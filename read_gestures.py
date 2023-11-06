@@ -52,7 +52,9 @@ def read_database(dir):
 dir = ["close_fist_horizontally", "close_fist_perpendicularly", "hand_to_left", "hand_to_right",
                          "hand_rotation_palm_up","hand_rotation_palm_down", "arm_to_left", "arm_to_right",
                          "hand_closer", "hand_away", "hand_up", "hand_down"]
-dir = ["close_fist_horizontally"]
+# dir = ["close_fist_horizontally"]
 #Read gestures from choosen directory
-data = read_database(dir[0])
+for item in dir:
+    data = read_database(dir)
+print(len(data))
 print(data[1].shape)
