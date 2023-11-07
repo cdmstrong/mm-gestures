@@ -15,15 +15,17 @@ class mm_DataSet(Dataset):
         dir = ["close_fist_horizontally", "close_fist_perpendicularly", "hand_to_left", "hand_to_right",
                          "hand_rotation_palm_up","hand_rotation_palm_down", "arm_to_left", "arm_to_right",
                          "hand_closer", "hand_away", "hand_up", "hand_down"]
-        dir = ["close_fist_horizontally"]
+        # dir = ["close_fist_horizontally"]
         #Read gestures from choosen directory
         for item in dir:
             data = read_database(item)
             for data_item in data:
-                self.data.append(data_item)
-                self.labels.append(gestureIdx[item].value)
-        print(len(self.data))
-        print(self.labels[30])
+                arr = np.zeros(12)
+                arr[gestureIdx[item].value - 1] = 1
+                self.data.append(torch.tensor(data_item, dtype = torch.float32))
+                self.labels.append(torch.tensor(arr, dtype = torch.float32))
+        # print(len(self.data))
+        # print(self.labels[30])
         # print(data[1].shape)
     def __len__(self):
         return len(self.data)
@@ -48,8 +50,8 @@ def read_database(dir):
             break
 
         FrameNumber = 1
-        pointlenght = 20 #maximum number of points in array
-        framelenght = 50 #int(data[-1][0]) #maximum number of frames in arrat
+        pointlenght = 50 #maximum number of points in array 对应frameNumber 每帧最多50个
+        framelenght = 50 #int(data[-1][0]) #maximum number of frames in array 最多50帧
         
         datalenght = int(len(data))
         gesturedata = np.zeros((framelenght,pointlenght, 4))
@@ -57,7 +59,6 @@ def read_database(dir):
 
         while counter < datalenght:
             arr = np.zeros((pointlenght, 4))
-            
             iterator = 0
 
             try:
